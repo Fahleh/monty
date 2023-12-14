@@ -1,6 +1,6 @@
 #include "monty.h"
 
-
+stack_t *head = NULL; 
 /**
  * main - Program entry point.
  * @argc: Number of arguments.
@@ -29,5 +29,6 @@ int main(int argc, char **argv)
 
 	fclose(file);
 
+	_clear();
 	return (0);
 }

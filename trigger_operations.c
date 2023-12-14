@@ -1,13 +1,131 @@
 #include "monty.h"
 
 /**
- * addData_to_stack1 - Adds a new node to the stack.
+ * addData_to_stack - Adds a new node to the stack.
  * @node: Pointer to the new node.
  * @line_number: Current line.
  * Return: Void.
  */
 
-void addData_to_stack1(stack_t **node, __atttribute__((unused))unsigned int ln)
+void addData_to_stack(stack_t **node, __attribute__((unused))unsigned int ln)
 {
-	stack_t *temp;
+	stack_t *temp_node;
+
+	if (node == NULL || *node == NULL)
+		exit(EXIT_FAILURE);
+	if (head == NULL)
+	{
+		head = *node;
+		return;
+	}
+
+	temp_node = head;
+	head = *node;
+	head->next = temp_node;
+	temp_node->prev = head;
 }
+
+/**
+ * addData_to_queue - Adds a new node to the stack.
+ * @node: Pointer to the new node.
+ * @line_number: Current line.
+ * Return: Void.
+ */
+
+void addData_to_queue(stack_t **node, __attribute__((unused))unsigned int ln)
+{
+	stack_t *temp_node;
+
+	if (node == NULL || *node == NULL)
+	{
+		 exit(EXIT_FAILURE);
+	}
+
+	if (head == NULL)
+	{
+		head = *node;
+		return;
+	}
+	temp_node = head;
+
+	while (temp_node->next != NULL)
+	{
+		temp_node = temp_node->next;
+	}
+
+	temp_node->next = *node;
+	(*node)->prev =temp_node;
+}
+
+/**
+ * _printAll - Adds a new node to the stack.
+ * @node: Pointer to the new node.
+ * @line_number: Current line.
+ * Return: Void.
+ */
+
+void _printAll(stack_t **node, __attribute__((unused))unsigned int ln)
+{
+	stack_t *temp_node;
+
+	if (node == NULL)
+		exit(EXIT_FAILURE);
+	temp_node = *node;
+	while (temp_node != NULL)
+	{
+		printf("%d\n", temp_node->n);
+		temp_node = temp_node->next;
+	}
+}
+
+/**
+ * _pint - Prints the node at the top of the stack.
+ * @node: Pointer to the new node.
+ * @line_number: Current line.
+ * Return: Void.
+ */
+
+void _pint(stack_t **node, unsigned int ln)
+{
+	if (node == NULL || *node == NULL)
+	{
+		fprintf(stderr, "L%d: can't pint, stack empty\n", ln);
+		exit(EXIT_FAILURE);
+	}
+	printf("%d\n", (*node)->n);
+}
+
+
+/**
+ * _popNode - Adds a node to the stack.
+ * @node: Pointer to the new node.
+ * @line_number: Current line.
+ * Return: Void.
+ */
+
+void _popNode(stack_t **node, unsigned int ln)
+{
+	stack_t *temp_node;
+
+	if (node == NULL || *node == NULL)
+	{
+		fprintf(stderr, "L%d: can't pop an empty stack\n", ln);
+	}
+
+	/*if ((*node)->next == NULL)
+	{
+
+		free(temp_node);
+		exit(EXIT_SUCCESS);
+	}*/
+	temp_node = *node;
+	if (temp_node->next == NULL)
+	{
+		return;
+	}
+	*node = temp_node->next;
+	(*node)->prev = NULL;
+	free(temp_node);
+}
+
+

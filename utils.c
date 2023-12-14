@@ -17,6 +17,7 @@ void _readFd(FILE *file)
 		format = _processLine(buffer, line_num, format);
 		line_num++;
 	}
+	free(buffer);
 }
 
 /**
@@ -40,6 +41,7 @@ int _processLine(char *buffer, size_t line_num, int format)
 	if (opcode == NULL)
 		return (format);
 	data = strtok(NULL, DELIM);
+	data = data ? data : NULL;
 
 	if (opcode[0] == '#')
 		return (format);
@@ -47,6 +49,7 @@ int _processLine(char *buffer, size_t line_num, int format)
 		return (1);
 	if (strcmp(opcode, "stack") == 0)
 		return (0);
+
 
 	_filterCommand(opcode, data, line_num, format);
 	
@@ -74,35 +77,34 @@ void _filterCommand(char *opcode, char *data, size_t line_num, int format)
 	{"pop", _popNode},
 	{"swap", _swapNodes},
 	{"add", _addNode},
-	{NULL, NULL}
-	};
-	/*{"nop", nop},
+	{"nop", _nop},
 	{"sub", _subtractNodes},
 	{"div", _divideNodes},
 	{"mul", _mul},
 	{"mod", _mod},
-	{"pchart", _printChart},
+	{"pchar", _printChar},
 	{"pstr", _printStr},
-	{"rotl", print_top},
-	{"rotr", print_top},
+	{"rotl", _rotl},
+	{"rotr", _rotr},
 	{NULL, NULL},
-	};*/
+	};
 
-	for (i = 0; funcTrigger[i].opcode != NULL; i++)
+	/*for (i = 0; funcTrigger[i].opcode != NULL; i++)
 	{
 		_triggerFunc(funcTrigger[i].f, opcode, data, line_num, format);
 		return;	
-	}
-	/*while (funcTrigger[i].opcode != NULL)
+	}*/
+
+	i = 0;
+	while (funcTrigger[i].opcode != NULL)
 	{
-		printf("opcode 2-: %s\n", opcode);
 		if (strcmp(opcode, funcTrigger[i].opcode) == 0)
 		{
 			_triggerFunc(funcTrigger[i].f, opcode, data, line_num, format);
 			return;
 		}
 		i++;
-	}*/
+	}
 }
 
 /**
@@ -121,6 +123,10 @@ void _triggerFunc(triggeredFunc f, char *opcode, char *data, int line_num, int f
 
 	if (strcmp("push", opcode) == 0)
 	{
+		if (line_num == 1)
+		{
+			head = NULL;
+		}
 		if (data == NULL)
 		{
 			fprintf(stderr, "L%d: usage: push integer\n", line_num);
@@ -143,58 +149,29 @@ void _triggerFunc(triggeredFunc f, char *opcode, char *data, int line_num, int f
 			i++;
 		}
 
+		node = malloc(sizeof(stack_t));
+		if (node == NULL)
+		{
+			fprintf(stderr, "Error: malloc failed\n");
+			exit(EXIT_FAILURE);
+		}
+		node->n = (atoi(data) * sign_flag);
+		node->next = NULL;
+		node->prev = NULL;
+
 		if (format == 1)
 		{
 			addData_to_queue(&node, line_num);
 		}
-		else
+		
+		if (format == 0)
 		{
 			f(&node, line_num);
 		}
 	}
 	else
-		printf("Execute function normally\n");
-		/*f(&head, line_num);*/
+	{
+		f(&head, line_num);
+	}
 
-	printf("Flag: %d\n ", sign_flag);
-}
-
-void bruhh(void)
-{
-	printf("works bitch!!!!\n");
-}
-
-void addData_to_stack(__attribute__((unused))stack_t **node, __attribute__((unused))unsigned int ln)
-{
-	printf("AddData to stack works!\n");
-}
-
-void addData_to_queue(__attribute__((unused))stack_t **new_node, __attribute__((unused))unsigned int ln)
-{
-        printf("AddData to queue works!\n");
-}
-
-void _printAll(__attribute__((unused))stack_t **new_node, __attribute__((unused))unsigned int ln)
-{
-        printf("_printAll to stack works!1\n");
-}
-
-void _pint(__attribute__((unused))stack_t **new_node, __attribute__((unused))unsigned int ln)
-{
-        printf("_pint to stack works!2");
-}
-
-void _popNode(__attribute__((unused))stack_t **new_node, __attribute__((unused))unsigned int ln)
-{
-        printf("_swapNodes to stack works!3");
-}
-
-void _swapNodes(__attribute__((unused))stack_t **new_node, __attribute__((unused))unsigned int ln)
-{
-        printf("_swapNodes to stack works!4");
-}
-
-void _addNode(__attribute__((unused))stack_t **new_node, __attribute__((unused))unsigned int ln)
-{
-        printf("AddNode to stack works!5");
 }

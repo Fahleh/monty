@@ -43,10 +43,12 @@ typedef struct instruction_s
 	void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
-typedef void (*triggeredFunc)(stack_t **, unsigned int);
 extern stack_t *head;
+typedef void (*triggeredFunc)(stack_t **, unsigned int);
 
-void bruhh(void);
+
+
+void _clear(void);
 	/* ======= UTILS ======= */
 void _readFd(FILE *file);
 int _processLine(char *buffer, size_t line_num, int format);
@@ -55,13 +57,27 @@ void _triggerFunc(triggeredFunc, char *, char *, int, int);
 
 	/* ======= OPERATIONS ======= */
 void addData_to_stack(stack_t **node, __attribute__((unused))unsigned int ln);
-void addData_to_queue(stack_t **new_node, __attribute__((unused))unsigned int ln);
+void addData_to_queue(stack_t **node, __attribute__((unused))unsigned int ln);
+void _printAll(stack_t **node, __attribute__((unused))unsigned int ln);
+void _pint(stack_t **node, unsigned int ln);
+void _popNode(stack_t **node, unsigned int ln);
+void _swapNodes(stack_t **node, unsigned int ln);
+void _addNode(stack_t **nnode, unsigned int ln);
 
-void _printAll(stack_t **new_node, __attribute__((unused))unsigned int ln);
-void _pint(stack_t **new_node, __attribute__((unused))unsigned int ln);
-void _popNode(stack_t **new_node, __attribute__((unused))unsigned int ln);
-void _swapNodes(stack_t **new_node, __attribute__((unused))unsigned int ln);
-void _addNode(stack_t **new_node, __attribute__((unused))unsigned int ln);
+void _nop(__attribute__((unused))stack_t **new_node, __attribute__((unused))unsigned int ln);
+
+void _subtractNodes(stack_t **new_node, unsigned int ln);
+void _divideNodes(stack_t **new_node, unsigned int ln);
+void _mul(stack_t **new_node, unsigned int ln);
+void _mod(stack_t **new_node, unsigned int ln);
+void _printChar(stack_t **new_node, unsigned int ln);
+void _printStr(stack_t **new_node, __attribute__((unused))unsigned int ln);
+
+
+
+	/* ======= OPERATIONS_SPATIAL ======= */
+void _rotl(stack_t **new_node, __attribute__((unused))unsigned int ln);
+void _rotr(stack_t **new_node, __attribute__((unused))unsigned int ln);
 
 
 #endif
