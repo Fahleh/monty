@@ -62,7 +62,7 @@ void _rotr(stack_t **node, __attribute__((unused))unsigned int line_no)
  * _generateNode - Creates a node and initializes itts data value.
  *
  * @data: Data to inittialise with.i
- * @sign-flag: Positive or negative flag.
+ * @sign_flag: Positive or negative flag.
  * Return: A node
  */
 
