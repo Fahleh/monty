@@ -1,6 +1,6 @@
 #include "monty.h"
 
-stack_t *head = NULL; 
+stack_t *head = NULL;
 /**
  * main - Program entry point.
  * @argc: Number of arguments.
@@ -15,6 +15,7 @@ int main(int argc, char **argv)
 	if (argc != 2)
 	{
 		fprintf(stderr, "USAGE: monty file\n");
+		free(head);
 		exit(EXIT_FAILURE);
 	}
 

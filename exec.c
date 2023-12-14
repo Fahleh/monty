@@ -23,11 +23,12 @@ void _readFd(FILE *file)
 /**
  * _processLine - Splits off two tokens from a line.
  * @buffer: Line to tokenize.
- * @line_num: Line number in file.
+ * @line_no: Line number in file.
+ * @format: 1 for Queue operations, 0 otherwise.
  * Return: Void
  */
 
-int _processLine(char *buffer, size_t line_num, int format)
+int _processLine(char *buffer, size_t line_no, int format)
 {
 	char *opcode, *data;
 
@@ -51,8 +52,8 @@ int _processLine(char *buffer, size_t line_num, int format)
 		return (0);
 
 
-	_filterCommand(opcode, data, line_num, format);
-	
+	_filterCommand(opcode, data, line_no, format);
+
 	return (format);
 }
 
@@ -61,12 +62,14 @@ int _processLine(char *buffer, size_t line_num, int format)
  * based on a match between the first token and first string
  * on the list.
  *
- * @buffer: Line to tokenize.
- * @line_num: Line number in file.
+ * @opcode: Command to execute.
+ * @data: Command argument.
+ * @line_no: Line number in file.
+ * @format: 1 for Queue operations, 0 otherwise.
  * Return: Void
  */
 
-void _filterCommand(char *opcode, char *data, size_t line_num, int format)
+void _filterCommand(char *opcode, char *data, size_t line_no, int format)
 {
 	int i;
 
@@ -89,18 +92,12 @@ void _filterCommand(char *opcode, char *data, size_t line_num, int format)
 	{NULL, NULL},
 	};
 
-	/*for (i = 0; funcTrigger[i].opcode != NULL; i++)
-	{
-		_triggerFunc(funcTrigger[i].f, opcode, data, line_num, format);
-		return;	
-	}*/
-
 	i = 0;
 	while (funcTrigger[i].opcode != NULL)
 	{
 		if (strcmp(opcode, funcTrigger[i].opcode) == 0)
 		{
-			_triggerFunc(funcTrigger[i].f, opcode, data, line_num, format);
+			_triggerFunc(funcTrigger[i].f, opcode, data, line_no, format);
 			return;
 		}
 		i++;
@@ -113,10 +110,12 @@ void _filterCommand(char *opcode, char *data, size_t line_num, int format)
  * @opcode: Command string.
  * @data: Value to be pushed
  * @line_num: Line number in file.
+ * @format: 1 for Queue operations, 0 otherwise.
  * Return: Void
  */
 
-void _triggerFunc(triggeredFunc f, char *opcode, char *data, int line_num, int format)
+void _triggerFunc(triggeredFunc f, char *opcode,
+		char *data, int line_num, int format)
 {
 	int i = 0, sign_flag = 1;
 	stack_t *node;
@@ -124,21 +123,17 @@ void _triggerFunc(triggeredFunc f, char *opcode, char *data, int line_num, int f
 	if (strcmp("push", opcode) == 0)
 	{
 		if (line_num == 1)
-		{
 			head = NULL;
-		}
 		if (data == NULL)
 		{
 			fprintf(stderr, "L%d: usage: push integer\n", line_num);
 			exit(EXIT_FAILURE);
 		}
-
 		if (data != NULL && data[0] == '-')
 		{
 			data = data + 1;
 			sign_flag = -1;
 		}
-
 		while (data[i] != '\0')
 		{
 			if (isdigit(data[i]) == 0)
@@ -149,25 +144,11 @@ void _triggerFunc(triggeredFunc f, char *opcode, char *data, int line_num, int f
 			i++;
 		}
 
-		node = malloc(sizeof(stack_t));
-		if (node == NULL)
-		{
-			fprintf(stderr, "Error: malloc failed\n");
-			exit(EXIT_FAILURE);
-		}
-		node->n = (atoi(data) * sign_flag);
-		node->next = NULL;
-		node->prev = NULL;
-
+		node = _generateNode(data, sign_flag);
 		if (format == 1)
-		{
 			addData_to_queue(&node, line_num);
-		}
-		
 		if (format == 0)
-		{
 			f(&node, line_num);
-		}
 	}
 	else
 	{

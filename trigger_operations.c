@@ -3,13 +3,14 @@
 /**
  * addData_to_stack - Adds a new node to the stack.
  * @node: Pointer to the new node.
- * @line_number: Current line.
+ * @line_no: Current line.
  * Return: Void.
  */
 
-void addData_to_stack(stack_t **node, __attribute__((unused))unsigned int ln)
+void addData_to_stack(stack_t **node, unsigned int line_no)
 {
 	stack_t *temp_node;
+	(void)line_no;
 
 	if (node == NULL || *node == NULL)
 		exit(EXIT_FAILURE);
@@ -28,17 +29,18 @@ void addData_to_stack(stack_t **node, __attribute__((unused))unsigned int ln)
 /**
  * addData_to_queue - Adds a new node to the stack.
  * @node: Pointer to the new node.
- * @line_number: Current line.
+ * @line_no: Current line.
  * Return: Void.
  */
 
-void addData_to_queue(stack_t **node, __attribute__((unused))unsigned int ln)
+void addData_to_queue(stack_t **node, unsigned int line_no)
 {
 	stack_t *temp_node;
+	(void)line_no;
 
 	if (node == NULL || *node == NULL)
 	{
-		 exit(EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	}
 
 	if (head == NULL)
@@ -54,17 +56,17 @@ void addData_to_queue(stack_t **node, __attribute__((unused))unsigned int ln)
 	}
 
 	temp_node->next = *node;
-	(*node)->prev =temp_node;
+	(*node)->prev = temp_node;
 }
 
 /**
  * _printAll - Adds a new node to the stack.
  * @node: Pointer to the new node.
- * @line_number: Current line.
+ * @line_no: Current line.
  * Return: Void.
  */
 
-void _printAll(stack_t **node, __attribute__((unused))unsigned int ln)
+void _printAll(stack_t **node, __attribute__((unused))unsigned int line_no)
 {
 	stack_t *temp_node;
 
@@ -81,15 +83,15 @@ void _printAll(stack_t **node, __attribute__((unused))unsigned int ln)
 /**
  * _pint - Prints the node at the top of the stack.
  * @node: Pointer to the new node.
- * @line_number: Current line.
+ * @line_no: Current line.
  * Return: Void.
  */
 
-void _pint(stack_t **node, unsigned int ln)
+void _pint(stack_t **node, unsigned int line_no)
 {
 	if (node == NULL || *node == NULL)
 	{
-		fprintf(stderr, "L%d: can't pint, stack empty\n", ln);
+		fprintf(stderr, "L%d: can't pint, stack empty\n", line_no);
 		exit(EXIT_FAILURE);
 	}
 	printf("%d\n", (*node)->n);
@@ -99,25 +101,19 @@ void _pint(stack_t **node, unsigned int ln)
 /**
  * _popNode - Adds a node to the stack.
  * @node: Pointer to the new node.
- * @line_number: Current line.
+ * @line_no: Current line.
  * Return: Void.
  */
 
-void _popNode(stack_t **node, unsigned int ln)
+void _popNode(stack_t **node, unsigned int line_no)
 {
 	stack_t *temp_node;
 
 	if (node == NULL || *node == NULL)
 	{
-		fprintf(stderr, "L%d: can't pop an empty stack\n", ln);
+		fprintf(stderr, "L%d: can't pop an empty stack\n", line_no);
 	}
 
-	/*if ((*node)->next == NULL)
-	{
-
-		free(temp_node);
-		exit(EXIT_SUCCESS);
-	}*/
 	temp_node = *node;
 	if (temp_node->next == NULL)
 	{

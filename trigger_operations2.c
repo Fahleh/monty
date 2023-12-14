@@ -3,17 +3,17 @@
 /**
  * _swapNodes - Swaps the top two nodes of the stack.
  * @node: Pointer to a head node.
- * @line_number: Current line.
+ * @line_no: Current line.
  * Return: Void.
  */
 
-void _swapNodes(stack_t **node, unsigned int ln)
+void _swapNodes(stack_t **node, unsigned int line_no)
 {
-        stack_t *temp_node;
+	stack_t *temp_node;
 
-        if (node == NULL || *node == NULL || (*node)->next == NULL)
+	if (node == NULL || *node == NULL || (*node)->next == NULL)
 	{
-		fprintf(stderr, "L%d: can't swap, stack too short\n", ln);
+		fprintf(stderr, "L%d: can't swap, stack too short\n", line_no);
 	       exit(EXIT_FAILURE);
 	}
 
@@ -31,17 +31,17 @@ void _swapNodes(stack_t **node, unsigned int ln)
 /**
  * _addNode - Adds the data in the top two nodes in the stack.
  * @node: Pointer to head node.
- * @line_number: Current line.
+ * @line_no: Current line.
  * Return: Void.
  */
 
-void _addNode(stack_t **node, unsigned int ln)
+void _addNode(stack_t **node, unsigned int line_no)
 {
 	int total;
 
 	if (node == NULL || *node == NULL || (*node)->next == NULL)
 	{
-		fprintf(stderr, "L%d: can't add, stack too short\n", ln);
+		fprintf(stderr, "L%d: can't add, stack too short\n", line_no);
 		exit(EXIT_FAILURE);
 	}
 	(*node) = (*node)->next;
@@ -54,29 +54,29 @@ void _addNode(stack_t **node, unsigned int ln)
 /**
  * _nop - A function that doesen't do anything.
  * @node: Pointer to head node.
- * @line_number: Current line.
+ * @line_no: Current line.
  * Return: Void.
  */
 
-void _nop(__attribute__((unused))stack_t **node, __attribute__((unused))unsigned int ln)
+void _nop(__attribute__((unused))stack_t **node, unsigned int line_no)
 {
-	return;
+	(void)line_no;
 }
 
 /**
  * _subtractNodes -- Subtracts the data in the top two nodes in the stack.
  * @node: Pointer to the head node.
- * @line_number: Current line.
+ * @line_no: Current line.
  * Return: Void.
  */
 
-void _subtractNodes(stack_t **node, unsigned int ln)
+void _subtractNodes(stack_t **node, unsigned int line_no)
 {
 	int total;
 
 	if (node == NULL || *node == NULL || (*node)->next == NULL)
 	{
-		fprintf(stderr, "L%d: can't sub, stack too short\n", ln);
+		fprintf(stderr, "L%d: can't sub, stack too short\n", line_no);
 		exit(EXIT_FAILURE);
 	}
 
@@ -91,24 +91,24 @@ void _subtractNodes(stack_t **node, unsigned int ln)
 /**
  * _divideNodes - Divides the data in the top two nodes in the stack.
  * @node: Pointer to the head node.
- * @line_number: Current line.
+ * @line_no: Current line.
  * Return: Void.
  */
 
-void _divideNodes(stack_t **node, unsigned int ln)
+void _divideNodes(stack_t **node, unsigned int line_no)
 {
 	int total;
 
 	if (node == NULL || *node == NULL || (*node)->next == NULL)
 	{
 
-		fprintf(stderr, "L%d: can't div, stack too short\n", ln);
+		fprintf(stderr, "L%d: can't div, stack too short\n", line_no);
 		exit(EXIT_FAILURE);
 	}
 
-	if((*node)->n == 0)
+	if ((*node)->n == 0)
 	{
-		fprintf(stderr, "L%d: division by zero\n", ln);
+		fprintf(stderr, "L%d: division by zero\n", line_no);
 		exit(EXIT_FAILURE);
 	}
 
