@@ -49,8 +49,8 @@ typedef void (*triggeredFunc)(stack_t **, unsigned int);
 
 	/* ======= EXECUTION ======= */
 void _readFd(FILE *file);
-int _processLine(char *buffer, size_t line_num, int format);
-void _filterCommand(char *opcode, char *data, size_t line_no, int format);
+int _processLine(char *buffer, int line_no, int format);
+void _filterCommand(char *opcode, char *data, int line_no, int format);
 void _triggerFunc(triggeredFunc, char *, char *, int, int);
 
 

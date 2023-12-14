@@ -9,13 +9,13 @@
 void _readFd(FILE *file)
 {
 	char *buffer = NULL;
-	size_t  len = 0, line_num = 1;
-	int format = 0;
+	size_t  len = 0;
+	int format = 0, line_no = 1;
 
 	while ((getline(&buffer, &len, file)) != -1)
 	{
-		format = _processLine(buffer, line_num, format);
-		line_num++;
+		format = _processLine(buffer, line_no, format);
+		line_no++;
 	}
 	free(buffer);
 }
@@ -28,7 +28,7 @@ void _readFd(FILE *file)
  * Return: Void
  */
 
-int _processLine(char *buffer, size_t line_no, int format)
+int _processLine(char *buffer, int line_no, int format)
 {
 	char *opcode, *data;
 
@@ -51,7 +51,6 @@ int _processLine(char *buffer, size_t line_no, int format)
 	if (strcmp(opcode, "stack") == 0)
 		return (0);
 
-
 	_filterCommand(opcode, data, line_no, format);
 
 	return (format);
@@ -69,7 +68,7 @@ int _processLine(char *buffer, size_t line_no, int format)
  * Return: Void
  */
 
-void _filterCommand(char *opcode, char *data, size_t line_no, int format)
+void _filterCommand(char *opcode, char *data, int line_no, int format)
 {
 	int i;
 
@@ -102,6 +101,8 @@ void _filterCommand(char *opcode, char *data, size_t line_no, int format)
 		}
 		i++;
 	}
+	fprintf(stderr, "L%d: unknown instruction %s\n", line_no, opcode);
+	exit(EXIT_FAILURE);
 }
 
 /**
@@ -109,24 +110,24 @@ void _filterCommand(char *opcode, char *data, size_t line_no, int format)
  * @f: Pointer to the called function.
  * @opcode: Command string.
  * @data: Value to be pushed
- * @line_num: Line number in file.
+ * @line_no: Line number in file.
  * @format: 1 for Queue operations, 0 otherwise.
  * Return: Void
  */
 
 void _triggerFunc(triggeredFunc f, char *opcode,
-		char *data, int line_num, int format)
+		char *data, int line_no, int format)
 {
 	int i = 0, sign_flag = 1;
 	stack_t *node;
 
 	if (strcmp("push", opcode) == 0)
 	{
-		if (line_num == 1)
+		if (line_no == 1)
 			head = NULL;
 		if (data == NULL)
 		{
-			fprintf(stderr, "L%d: usage: push integer\n", line_num);
+			fprintf(stderr, "L%d: usage: push integer\n", line_no);
 			exit(EXIT_FAILURE);
 		}
 		if (data != NULL && data[0] == '-')
@@ -138,7 +139,7 @@ void _triggerFunc(triggeredFunc f, char *opcode,
 		{
 			if (isdigit(data[i]) == 0)
 			{
-				fprintf(stderr, "L%d: usage: push integer\n", line_num);
+				fprintf(stderr, "L%d: usage: push integer\n", line_no);
 				exit(EXIT_FAILURE);
 			}
 			i++;
@@ -146,13 +147,13 @@ void _triggerFunc(triggeredFunc f, char *opcode,
 
 		node = _generateNode(data, sign_flag);
 		if (format == 1)
-			addData_to_queue(&node, line_num);
+			addData_to_queue(&node, line_no);
 		if (format == 0)
-			f(&node, line_num);
+			f(&node, line_no);
 	}
 	else
 	{
-		f(&head, line_num);
+		f(&head, line_no);
 	}
 
 }
