@@ -14,7 +14,7 @@ void _readFd(FILE *file)
 
 	while ((getline(&buffer, &len, file)) != -1)
 	{
-		format = _processLine(buffer, line_no, format);
+		format = _processLine(buffer, line_no, format, file);
 		line_no++;
 	}
 	free(buffer);
@@ -28,9 +28,10 @@ void _readFd(FILE *file)
  * Return: Void
  */
 
-int _processLine(char *buffer, int line_no, int format)
+int _processLine(char *buffer, int line_no, int format, FILE *file)
 {
 	char *opcode, *data;
+	int status = 0;
 
 	if (buffer == NULL)
 	{
@@ -51,7 +52,14 @@ int _processLine(char *buffer, int line_no, int format)
 	if (strcmp(opcode, "stack") == 0)
 		return (0);
 
-	_filterCommand(opcode, data, line_no, format);
+	status = _filterCommand(opcode, data, line_no, format);
+
+	if (status == 5)
+	{
+		fclose(file);
+		free(buffer);
+		exit(1);
+	}
 
 	return (format);
 }
@@ -68,7 +76,7 @@ int _processLine(char *buffer, int line_no, int format)
  * Return: Void
  */
 
-void _filterCommand(char *opcode, char *data, int line_no, int format)
+int _filterCommand(char *opcode, char *data, int line_no, int format)
 {
 	int i;
 
@@ -97,12 +105,20 @@ void _filterCommand(char *opcode, char *data, int line_no, int format)
 		if (strcmp(opcode, funcTrigger[i].opcode) == 0)
 		{
 			_triggerFunc(funcTrigger[i].f, opcode, data, line_no, format);
-			return;
+			if (strcmp(opcode, "pchar") == 0)
+			{
+				if (head == NULL)
+				{
+					return (5);
+				}
+			}
+			return (0);
 		}
 		i++;
 	}
 	fprintf(stderr, "L%d: unknown instruction %s\n", line_no, opcode);
 	exit(EXIT_FAILURE);
+	return (0);
 }
 
 /**
@@ -128,7 +144,7 @@ void _triggerFunc(triggeredFunc f, char *opcode,
 		if (data == NULL)
 		{
 			fprintf(stderr, "L%d: usage: push integer\n", line_no);
-			exit(EXIT_FAILURE);
+			return;
 		}
 		if (data != NULL && data[0] == '-')
 		{
@@ -140,7 +156,7 @@ void _triggerFunc(triggeredFunc f, char *opcode,
 			if (isdigit(data[i]) == 0)
 			{
 				fprintf(stderr, "L%d: usage: push integer\n", line_no);
-				exit(EXIT_FAILURE);
+				return;
 			}
 			i++;
 		}

@@ -1,3 +1,3 @@
-push 1
+push 
 pall
 push a
