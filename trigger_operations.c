@@ -78,6 +78,7 @@ void _printAll(stack_t **node, __attribute__((unused))unsigned int line_no)
 		printf("%d\n", temp_node->n);
 		temp_node = temp_node->next;
 	}
+	fflush(stdout);
 }
 
 /**
@@ -118,7 +119,9 @@ void _popNode(stack_t **node, unsigned int line_no)
 	temp_node = *node;
 	if (temp_node->next == NULL)
 	{
-		exit(EXIT_SUCCESS);
+		*node = temp_node->next;
+		free(temp_node);
+		return;
 	}
 	*node = temp_node->next;
 	(*node)->prev = NULL;
