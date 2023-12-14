@@ -69,14 +69,14 @@ void _printChar(stack_t **node, unsigned int line_no)
 	if (node == NULL || *node == NULL)
 	{
 		fprintf(stderr, "L%d: can't pchar, stack empty\n", line_no);
-		exit(EXIT_FAILURE);
+		return;
 	}
 
 	value = (*node)->n;
 	if (value < 0 || value > 225)
 	{
 		fprintf(stderr, "L%d: can't pchar, value out of range\n", line_no);
-		exit(EXIT_FAILURE);
+		return;
 	}
 
 	printf("%c\n", value);
