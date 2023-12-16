@@ -69,14 +69,14 @@ void _printChar(stack_t **node, unsigned int line_no)
 	if (node == NULL || *node == NULL)
 	{
 		fprintf(stderr, "L%d: can't pchar, stack empty\n", line_no);
-		return;
+		exit(EXIT_FAILURE);
 	}
 
 	value = (*node)->n;
-	if (value < 0 || value > 225)
+	if (value < 0 || value > 127)
 	{
 		fprintf(stderr, "L%d: can't pchar, value out of range\n", line_no);
-		return;
+		exit(EXIT_FAILURE);
 	}
 
 	printf("%c\n", value);
@@ -109,7 +109,7 @@ void _printStr(stack_t **node, unsigned int line_no)
 	{
 		value = temp_node->n;
 
-		if (value <= 0 || value > 255)
+		if (value <= 0 || value > 127)
 			break;
 		printf("%c", value);
 		temp_node = temp_node->next;

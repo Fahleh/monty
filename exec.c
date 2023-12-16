@@ -25,6 +25,7 @@ void _readFd(FILE *file)
  * @buffer: Line to tokenize.
  * @line_no: Line number in file.
  * @format: 1 for Queue operations, 0 otherwise.
+ * @file: Pointer to open file.
  * Return: Void
  */
 
@@ -108,9 +109,7 @@ int _filterCommand(char *opcode, char *data, int line_no, int format)
 			if (strcmp(opcode, "pchar") == 0)
 			{
 				if (head == NULL)
-				{
 					return (5);
-				}
 			}
 			return (0);
 		}
@@ -144,7 +143,7 @@ void _triggerFunc(triggeredFunc f, char *opcode,
 		if (data == NULL)
 		{
 			fprintf(stderr, "L%d: usage: push integer\n", line_no);
-			return;
+			exit(EXIT_FAILURE);
 		}
 		if (data != NULL && data[0] == '-')
 		{
@@ -156,7 +155,7 @@ void _triggerFunc(triggeredFunc f, char *opcode,
 			if (isdigit(data[i]) == 0)
 			{
 				fprintf(stderr, "L%d: usage: push integer\n", line_no);
-				return;
+				exit(EXIT_FAILURE);
 			}
 			i++;
 		}
